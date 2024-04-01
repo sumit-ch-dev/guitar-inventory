@@ -14,9 +14,10 @@ public class Inventory {
                           String model,
                           Type type,
                           Wood backWood,
-                          Wood topWood) {
+                          Wood topWood,
+                          int numStrings) {
 
-        GuitarSpec spec = new GuitarSpec(model, builder, backWood, topWood, type);
+        GuitarSpec spec = new GuitarSpec(model, builder, backWood, topWood, type, numStrings);
 
         Guitar guitar = new Guitar(serialNumber,price, spec);
         guitars.add(guitar);
@@ -37,25 +38,8 @@ public class Inventory {
         for(Guitar g: guitars) {
             GuitarSpec guitarSpec = g.getSpec();
 
-
-            Builder builder = guitarSpec.getBuilder();
-
-            if(searchSpec.getBuilder() != null && (!builder.equals(g.getSpec().getBuilder()))) continue;
-
-            String model = guitarSpec.getModel().toLowerCase();
-
-            if(searchSpec.getModel() != null && (!model.isEmpty()) && (!model.equals(g.getSpec().getModel().toLowerCase()))) continue;
-
-
-            if(searchSpec.getType() != guitarSpec.getType()) continue;
-
-
-            if(searchSpec.getBackWood() != guitarSpec.getBackWood()) continue;
-
-
-            if(searchSpec.getTopWood() != guitarSpec.getTopWood()) continue;
-
-            matchingGuitars.add(g);
+            if(g.getSpec().matches(searchSpec))
+                matchingGuitars.add(g);
         }
         return matchingGuitars;
     }
@@ -71,10 +55,11 @@ public class Inventory {
                         spec.getBuilder() + "  " +
                         spec.getModel() +
                         " " + spec.getType() + " guitar \n" +
-                        " " + spec.getBackWood() + "Back and sides \n" +
-                        " " + spec.getTopWood() + " and top \n" +
+                        " " + spec.getBackWood() + " back and sides \n" +
+                        " " + spec.getTopWood() + " top \n" +
+                        " with " + spec.getNumStrings() + " strings \n" +
                         " and you can get it for only $" +
-                        guitar.getPrice() + "! \n.."
+                        guitar.getPrice() + "! \n--------"
                 );
             }
         } else {
